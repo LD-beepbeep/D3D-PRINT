@@ -637,21 +637,32 @@
                 width: 100%;
             }
         }
+        
 
         @media (max-width: 480px) {
-            .products {
-                grid-template-columns: 1fr;
-            }
+    .products {
+        grid-template-columns: 1fr;
+    }
 
-            .product-footer {
-                flex-direction: column;
-                gap: 12px;
-            }
+    .product-footer {
+        flex-direction: column;
+        gap: 12px;
+    }
 
-            .add-to-cart {
-                width: 100%;
-            }
-        }
+    .add-to-cart {
+        width: 100%;
+    }
+
+    /* Smaller sorting dropdown on mobile */
+    .sort-dropdown {
+        font-size: 0.85em;
+        padding: 8px 14px;
+        border-radius: 30px;
+        max-width: 220px;
+        align-self: flex-end;
+    }
+}
+
     </style>
 </head>
 <body>
