@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3D PRINT - Op Maat Gemaakte 3D Prints</title>
+    <title>D3D PRINT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -13,25 +14,27 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
             color: #333;
             min-height: 100vh;
         }
 
         .top-bar {
-            background: #0073e6;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
             color: white;
-            padding: 10px 0;
+            padding: 12px 0;
             font-size: 0.9em;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0,115,230,0.3);
         }
 
         header {
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
         .header-content {
@@ -47,15 +50,19 @@
 
         .logo {
             font-size: 2em;
-            font-weight: bold;
-            color: #0073e6;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .logo-icon {
-            font-size: 1.2em;
+        .logo i {
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .search-container {
@@ -71,25 +78,27 @@
 
         .search-box input {
             width: 100%;
-            padding: 14px 50px 14px 20px;
+            padding: 14px 50px 14px 45px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 50px;
             font-size: 1em;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .search-box input:focus {
             outline: none;
             border-color: #0073e6;
+            box-shadow: 0 4px 12px rgba(0,115,230,0.15);
+            transform: translateY(-1px);
         }
 
         .search-icon {
             position: absolute;
-            right: 15px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
             color: #999;
-            font-size: 1.2em;
         }
 
         .container {
@@ -99,15 +108,18 @@
         }
 
         .page-header {
-            margin: 30px 0 30px;
+            margin: 40px 0;
             text-align: center;
         }
 
         .page-title {
-            font-size: 2.2em;
-            font-weight: 600;
-            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 12px;
             color: #222;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .page-subtitle {
@@ -117,10 +129,10 @@
 
         .filters-row {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 24px;
+            border-radius: 16px;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -130,63 +142,68 @@
 
         .filter-buttons {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
             flex: 1;
         }
 
         .filter-btn {
-            padding: 10px 20px;
+            padding: 11px 22px;
             background: white;
-            border: 2px solid #e0e0e0;
-            color: #333;
-            border-radius: 20px;
+            border: 2px solid #e5e5e5;
+            color: #555;
+            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.95em;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .filter-btn:hover {
             border-color: #0073e6;
             color: #0073e6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,115,230,0.15);
         }
 
         .filter-btn.active {
-            background: #0073e6;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
             border-color: #0073e6;
             color: white;
+            box-shadow: 0 4px 12px rgba(0,115,230,0.3);
         }
 
         .sort-dropdown {
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 11px 18px;
+            border: 2px solid #e5e5e5;
+            border-radius: 50px;
             background: white;
-            color: #333;
+            color: #555;
             font-size: 0.95em;
             cursor: pointer;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .sort-dropdown:focus {
             outline: none;
             border-color: #0073e6;
+            box-shadow: 0 4px 8px rgba(0,115,230,0.15);
         }
 
         .products {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
             margin-bottom: 40px;
         }
 
         .product-card {
             background: white;
-            border-radius: 8px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
             display: flex;
@@ -194,64 +211,59 @@
         }
 
         .product-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+            transform: translateY(-8px);
         }
 
         .badge {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            background: #ff6b35;
+            top: 16px;
+            left: 16px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
             color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
+            padding: 6px 14px;
+            border-radius: 20px;
             font-size: 0.75em;
-            font-weight: 600;
+            font-weight: 700;
             z-index: 10;
+            box-shadow: 0 4px 8px rgba(255,107,53,0.3);
         }
 
         .badge.new {
-            background: #2ecc71;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
         }
 
         .product-image {
             width: 100%;
-            height: 260px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 1px solid #f0f0f0;
+            height: 280px;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
-        .image-placeholder {
-            text-align: center;
-            color: #adb5bd;
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .image-placeholder-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-            opacity: 0.5;
-        }
-
-        .image-placeholder-text {
-            font-size: 0.9em;
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
         }
 
         .product-info {
-            padding: 18px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             flex: 1;
         }
 
         .product-name {
-            font-size: 1.15em;
-            font-weight: 600;
+            font-size: 1.2em;
+            font-weight: 700;
             margin-bottom: 10px;
             color: #222;
             line-height: 1.4;
@@ -261,25 +273,46 @@
             color: #666;
             font-size: 0.9em;
             line-height: 1.6;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             flex: 1;
+        }
+
+        .makerworld-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #0073e6;
+            text-decoration: none;
+            font-size: 0.85em;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .makerworld-link:hover {
+            color: #005bb5;
+            gap: 8px;
         }
 
         .product-specs {
             display: flex;
-            gap: 15px;
-            margin: 15px 0;
+            gap: 12px;
+            margin: 16px 0;
             font-size: 0.85em;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
+            padding: 14px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%);
+            border-radius: 12px;
         }
 
         .spec-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             color: #666;
+        }
+
+        .spec-item i {
+            color: #0073e6;
         }
 
         .spec-item strong {
@@ -291,30 +324,34 @@
             justify-content: space-between;
             align-items: center;
             margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
+            padding-top: 16px;
+            border-top: 2px solid #f0f0f0;
         }
 
         .product-price {
-            font-size: 1.6em;
-            font-weight: 700;
-            color: #222;
+            font-size: 1.8em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .add-to-cart {
-            background: #0073e6;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 13px 26px;
+            border-radius: 50px;
             cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s ease;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.95em;
+            box-shadow: 0 4px 12px rgba(0,115,230,0.3);
         }
 
         .add-to-cart:hover {
-            background: #005bb5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,115,230,0.4);
         }
 
         .modal {
@@ -324,81 +361,169 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             z-index: 1000;
             overflow-y: auto;
             padding: 20px;
+            backdrop-filter: blur(4px);
         }
 
         .modal-content {
             background: white;
-            max-width: 600px;
+            max-width: 650px;
             margin: 40px auto;
-            border-radius: 8px;
+            border-radius: 20px;
             position: relative;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-header {
-            padding: 24px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 28px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
         .close-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.8em;
+            top: 24px;
+            right: 24px;
+            font-size: 1.5em;
             cursor: pointer;
             color: #999;
-            background: none;
+            background: #f5f5f5;
             border: none;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .close-btn:hover {
-            background: #f5f5f5;
+            background: #e5e5e5;
             color: #333;
+            transform: rotate(90deg);
         }
 
         .modal-body {
-            padding: 24px;
+            padding: 28px;
         }
 
         .modal h2 {
-            font-size: 1.6em;
-            font-weight: 600;
+            font-size: 1.8em;
+            font-weight: 700;
             color: #222;
             margin-bottom: 8px;
         }
 
-        .modal-product-info {
+        .quantity-selector {
             background: #f8f9fa;
-            padding: 16px;
-            border-radius: 6px;
+            padding: 20px;
+            border-radius: 12px;
             margin: 20px 0;
+        }
+
+        .quantity-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #0073e6;
+            background: white;
+            color: #0073e6;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .quantity-btn:hover {
+            background: #0073e6;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .quantity-display {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #222;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .modal-product-info {
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .price-label {
+            color: #666;
+            font-size: 0.9em;
         }
 
         .modal-price {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #222;
-            margin-top: 8px;
+            font-size: 2em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .total-price {
+            font-size: 2.2em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .info-box {
-            background: #e3f2fd;
+            background: linear-gradient(135deg, #e3f2fd 0%, #d6ebff 100%);
             border-left: 4px solid #0073e6;
-            padding: 16px;
+            padding: 18px;
             margin: 20px 0;
-            border-radius: 4px;
+            border-radius: 8px;
             color: #0d47a1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .form-group {
@@ -407,9 +532,9 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #333;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.95em;
         }
 
@@ -417,11 +542,11 @@
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
+            padding: 13px;
+            border: 2px solid #e5e5e5;
+            border-radius: 10px;
             font-size: 1em;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
             font-family: inherit;
         }
 
@@ -430,28 +555,31 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #0073e6;
+            box-shadow: 0 4px 12px rgba(0,115,230,0.1);
         }
 
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 90px;
         }
 
         .submit-btn {
             width: 100%;
-            padding: 16px;
-            background: #0073e6;
+            padding: 18px;
+            background: linear-gradient(135deg, #0073e6 0%, #005bb5 100%);
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 1.1em;
-            font-weight: 600;
+            border-radius: 50px;
+            font-size: 1.15em;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 16px rgba(0,115,230,0.3);
         }
 
         .submit-btn:hover {
-            background: #005bb5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,115,230,0.4);
         }
 
         .submit-btn:disabled {
@@ -461,44 +589,22 @@
 
         .success-message {
             display: none;
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 2px solid #28a745;
             color: #155724;
-            padding: 20px;
-            border-radius: 6px;
+            padding: 24px;
+            border-radius: 12px;
             margin: 20px 0;
+            text-align: center;
         }
 
         footer {
             background: white;
-            margin-top: 60px;
+            margin-top: 80px;
             padding: 40px 20px;
             text-align: center;
             color: #666;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: #0073e6;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: #005bb5;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
         }
 
         @media (max-width: 768px) {
@@ -519,7 +625,7 @@
             }
 
             .page-title {
-                font-size: 1.6em;
+                font-size: 1.8em;
             }
 
             .filters-row {
@@ -545,27 +651,6 @@
             .add-to-cart {
                 width: 100%;
             }
-            .product-image {
-    width: 100%;
-    height: 260px;
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid #f0f0f0;
-    background: #f8f9fa; /* fallback als afbeelding langzaam laadt */
-}
-
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* zorgt dat de foto mooi vullend is, zonder vervorming */
-    object-position: center;
-    display: block;
-    transition: transform 0.4s ease;
-}
-
-.product-card:hover .product-image img {
-    transform: scale(1.08); /* leuke zoom-effect bij hover */
-}
         }
     </style>
 </head>
@@ -575,13 +660,13 @@
     <header>
         <div class="header-content">
             <div class="logo">
-                <span class="logo-icon">🖨️</span>
+                <i class="fas fa-print"></i>
                 <span>D3D PRINT</span>
             </div>
             <div class="search-container">
                 <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
                     <input type="text" id="searchInput" placeholder="Zoek naar 3D prints..." onkeyup="searchProducts()">
-                    <span class="search-icon">🔍</span>
                 </div>
             </div>
         </div>
@@ -590,19 +675,29 @@
     <div class="container">
         <div class="page-header">
             <h1 class="page-title">3D Prints Op Maat</h1>
-
+            <p class="page-subtitle">Kwaliteitsvolle prints met zorg gemaakt voor familie en vrienden</p>
         </div>
 
         <div class="filters-row">
             <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterProducts('all')">Alles</button>
-                <button class="filter-btn" onclick="filterProducts('decor')">Decoratie</button>
-                <button class="filter-btn" onclick="filterProducts('practical')">Praktisch</button>
-                <button class="filter-btn" onclick="filterProducts('toys')">Speelgoed</button>
-                <button class="filter-btn" onclick="filterProducts('gifts')">Cadeaus</button>
+                <button class="filter-btn active" onclick="filterProducts('all')">
+                    <i class="fas fa-th"></i> Alles
+                </button>
+                <button class="filter-btn" onclick="filterProducts('decor')">
+                    <i class="fas fa-home"></i> Decoratie
+                </button>
+                <button class="filter-btn" onclick="filterProducts('practical')">
+                    <i class="fas fa-tools"></i> Praktisch
+                </button>
+                <button class="filter-btn" onclick="filterProducts('toys')">
+                    <i class="fas fa-gamepad"></i> Speelgoed
+                </button>
+                <button class="filter-btn" onclick="filterProducts('gifts')">
+                    <i class="fas fa-gift"></i> Cadeaus
+                </button>
             </div>
             <select class="sort-dropdown" onchange="sortProducts(this.value)">
-                <option value="default">Sorteer op</option>
+                <option value="default"><i class="fas fa-sort"></i> Sorteer op</option>
                 <option value="price-low">Prijs: laag naar hoog</option>
                 <option value="price-high">Prijs: hoog naar laag</option>
                 <option value="time-low">Printtijd: kort naar lang</option>
@@ -610,36 +705,13 @@
             </select>
         </div>
 
-        <div class="products" id="productsGrid">
-            <!-- PRODUCT 1 - KOPIEER VAN HIER OM NIEUWE PRODUCTEN TOE TE VOEGEN -->
-            <div class="product-card" data-category="practical" data-price="€1,60" data-time="170">
-                <span class="badge">Populair</span>
-                <div class="product-image">
-                    <div class="product-image">
-    <img src="https://makerworld.bblmw.com/makerworld/model/USb0aee2f62a8650/design/2023-08-29_m8cbla21t0cd.jpg?x-oss-process=image/resize,w_1000/format,webp" alt="">
-</div>
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Cable Organizer</div>
-                    <div class="product-description">Een draagbare kabelorganizer met een knop aan de zijkant waarmee je de kabel gemakkelijk kunt oprollen als je hem wilt opbergen.</div>
-                    <div class="product-specs">
-                        <div class="spec-item">⚖️ <strong>43g</strong></div>
-                        <div class="spec-item">⏱️ <strong>1,7u</strong></div>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">€1,60</div>
-                        <button class="add-to-cart" onclick="openModal('Cable Organizer', '€1,60', 'practical')">Bestellen</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="products" id="productsGrid"></div>
     </div>
 
     <footer>
         <div class="footer-content">
             <p><strong>D3D PRINT</strong> - 3D Printservice Op Maat</p>
-            <p style="margin-top: 10px; color: #999;">Vragen? Stuur me gewoon een berichtje! - © Lars Dehairs</p>
-          
+            <p style="margin-top: 10px; color: #999;">Vragen? Stuur me gewoon een berichtje! • © Lars Dehairs</p>
         </div>
     </footer>
 
@@ -647,43 +719,61 @@
     <div id="orderModal" class="modal" onclick="closeModalOnOutside(event)">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close-btn" onclick="closeModal()">×</button>
+                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
                 <h2 id="modalProductName">Productnaam</h2>
                 <div style="color: #666; font-size: 0.9em; margin-top: 4px;">Voltooi je bestelling</div>
             </div>
             
             <div class="modal-body">
+                <div class="quantity-selector">
+                    <label class="quantity-label"><i class="fas fa-layer-group"></i> Aantal stuks</label>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="changeQuantity(-1)"><i class="fas fa-minus"></i></button>
+                        <span class="quantity-display" id="quantityDisplay">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(1)"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+
                 <div class="modal-product-info">
-                    <div style="color: #666; font-size: 0.9em; margin-bottom: 8px;">Prijs</div>
-                    <div class="modal-price" id="modalProductPrice">€0,00</div>
+                    <div class="price-row">
+                        <span class="price-label">Prijs per stuk:</span>
+                        <span class="modal-price" id="modalProductPrice">€0,00</span>
+                    </div>
+                    <div class="price-row" style="margin-top: 16px; padding-top: 16px; border-top: 2px solid #e0e0e0;">
+                        <span class="price-label" style="font-size: 1.1em; font-weight: 700; color: #333;">Totaalprijs:</span>
+                        <span class="total-price" id="totalPrice">€0,00</span>
+                    </div>
                 </div>
                 
                 <div class="info-box">
-                    <strong>💰 Betaling:</strong> Breng alsjeblieft contant geld mee bij het ophalen van je print!
+                    <i class="fas fa-info-circle" style="font-size: 1.3em;"></i>
+                    <span><strong>Betaling:</strong> Breng alsjeblieft contant geld mee bij het ophalen van je print!</span>
                 </div>
 
                 <form id="orderForm" action="https://formspree.io/f/mlgevqob" method="POST">
                     <input type="hidden" name="product" id="formProduct">
-                    <input type="hidden" name="price" id="formPrice">
+                    <input type="hidden" name="price_per_unit" id="formPricePerUnit">
+                    <input type="hidden" name="quantity" id="formQuantity">
+                    <input type="hidden" name="total_price" id="formTotalPrice">
                     <input type="hidden" name="category" id="formCategory">
                     
                     <div class="form-group">
-                        <label for="name">Volledige Naam *</label>
+                        <label for="name"><i class="fas fa-user"></i> Volledige Naam *</label>
                         <input type="text" id="name" name="name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="email">E-mailadres *</label>
+                        <label for="email"><i class="fas fa-envelope"></i> E-mailadres *</label>
                         <input type="email" id="email" name="email" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="phone">WhatsApp Nummer *</label>
+                        <label for="phone"><i class="fab fa-whatsapp"></i> WhatsApp Nummer *</label>
                         <input type="tel" id="phone" name="phone" placeholder="+32 ..." required>
                     </div>
 
                     <div class="form-group">
-                        <label for="delivery">Levermethode *</label>
+                        <label for="delivery"><i class="fas fa-shipping-fast"></i> Levermethode *</label>
                         <select id="delivery" name="delivery" required onchange="toggleAddress()">
                             <option value="">Kies een optie</option>
                             <option value="pickup">Ophalen bij jou thuis</option>
@@ -692,20 +782,28 @@
                     </div>
 
                     <div class="form-group" id="addressGroup" style="display: none;">
-                        <label for="address">Bezorgadres</label>
+                        <label for="address"><i class="fas fa-map-marker-alt"></i> Bezorgadres</label>
                         <input type="text" id="address" name="address" placeholder="Straat, Nummer, Stad">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gift"><i class="fa-solid fa-gift"></i> Cadeaubon</label>
+                        <input id="gift" name="gift" placeholder="Bv: UHK2FD">
                     </div>
 
                     <div class="form-group">
-                        <label for="notes">Speciale Verzoeken of Opmerkingen</label>
+                        <label for="notes"><i class="fas fa-comment"></i> Speciale Verzoeken of Opmerkingen</label>
                         <textarea id="notes" name="notes" placeholder="Eventuele aanpassingen, vragen of speciale verzoeken..."></textarea>
                     </div>
 
-                    <button type="submit" class="submit-btn" id="submitBtn">Bestelling Plaatsen</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-check-circle"></i> Bestelling Plaatsen
+                    </button>
                 </form>
 
                 <div id="successMessage" class="success-message">
-                    <strong>✅ Bestelling Bevestigd!</strong><br><br>
+                    <i class="fas fa-check-circle" style="font-size: 2.5em; margin-bottom: 12px; display: block;"></i>
+                    <strong>Bestelling Bevestigd!</strong><br><br>
                     Bedankt! Ik heb je bestelling ontvangen en neem binnenkort via WhatsApp contact met je op met updates.
                 </div>
             </div>
@@ -713,25 +811,139 @@
     </div>
 
     <script>
+        // HIER KUN JE MAKKELIJK PRODUCTEN TOEVOEGEN - GEWOON KOPIËREN EN PLAKKEN!
+        const products = [
+            {
+                name: 'Cable Organizer',
+                category: 'practical',
+                price: 1.60,
+                weight: '43g',
+                time: '1u 42m',
+                timeMinutes: 102,
+                description: 'Een draagbare kabelorganizer met een knop aan de zijkant waarmee je de kabel gemakkelijk kunt oprollen.',
+                image: 'https://makerworld.bblmw.com/makerworld/model/USb0aee2f62a8650/design/2023-08-29_m8cbla21t0cd.jpg?x-oss-process=image/resize,w_1000/format,webp',
+                makerworld: 'https://makerworld.com/en/models/157193',
+                badge: 'Populair'
+            },
+            {
+                name: 'Tandenborstelhouder',
+                category: 'practical',
+                price: 2.00,
+                weight: '56g',
+                time: '2u',
+                timeMinutes: 120,
+                description: 'Praktische wandmontage tandenborstelhouder met ruimte voor tandpasta. Houdt je badkamer netjes.',
+                image: 'https://makerworld.bblmw.com/makerworld/model/US7933a9b69e43f/design/2024-02-06_6e89e4e6a6568.jpg?x-oss-process=image/resize,w_1000/format,webp',
+                makerworld: 'https://makerworld.com/en/models/168274'
+            },
+            {
+                name: 'Telefoonhouder',
+                category: 'practical',
+                price: 1.80,
+                weight: '35g',
+                time: '1u 35m',
+                timeMinutes: 95,
+                description: 'Verstelbare telefoonhouder voor bureau of nachtkastje. Werkt met alle telefoonformaten.',
+                image: 'https://makerworld.bblmw.com/makerworld/model/US0123456789abc/design/2023-11-20_phoneholder.jpg?x-oss-process=image/resize,w_1000/format,webp',
+                makerworld: 'https://makerworld.com/en/models/145678'
+            },
+            {
+                name: 'Sleutelhanger',
+                category: 'gifts',
+                price: 1.20,
+                weight: '12g',
+                time: '45m',
+                timeMinutes: 45,
+                description: 'Sleutelhanger met jouw naam of initialen. Perfect cadeau-idee voor familie en vrienden!',
+                image: 'https://makerworld.bblmw.com/makerworld/model/USabc123def456/design/2024-03-10_keychain.jpg?x-oss-process=image/resize,w_1000/format,webp',
+                makerworld: 'https://makerworld.com/en/models/178934',
+                badge: 'Nieuw',
+                badgeType: 'new'
+            },
+            {
+                name: 'Plantenpot',
+                category: 'decor',
+                price: 2.50,
+                weight: '48g',
+                time: '2u 30m',
+                timeMinutes: 150,
+                description: 'Moderne geometrische plantenpot perfect voor kleine vetplanten en kruiden. Stijlvol design!',
+                image: 'https://makerworld.bblmw.com/makerworld/model/US456789abc123/design/2024-02-28_planter.jpg?x-oss-process=image/resize,w_1000/format,webp',
+                makerworld: 'https://makerworld.com/en/models/192345'
+            }
+        ];
+
+        // Render alle producten
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" data-category="${product.category}" data-price="${product.price}" data-time="${product.timeMinutes}">
+                    ${product.badge ? `<span class="badge ${product.badgeType || ''}">${product.badge}</span>` : ''}
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <a href="${product.makerworld}" target="_blank" class="makerworld-link">
+                            <i class="fas fa-external-link-alt"></i> Bekijk op MakerWorld
+                        </a>
+                        <div class="product-specs">
+                            <div class="spec-item">
+                                <i class="fas fa-weight-hanging"></i> <strong>${product.weight}</strong>
+                            </div>
+                            <div class="spec-item">
+                                <i class="fas fa-clock"></i> <strong>${product.time}</strong>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">€${product.price.toFixed(2).replace('.', ',')}</div>
+                            <button class="add-to-cart" onclick='openModal(${JSON.stringify(product)})'>
+                                <i class="fas fa-shopping-cart"></i> Bestellen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         let currentOrder = {
-            product: '',
-            price: '',
-            category: ''
+            product: null,
+            quantity: 1
         };
 
-        function openModal(productName, price, category) {
-            currentOrder.product = productName;
-            currentOrder.price = price;
-            currentOrder.category = category;
+        function openModal(product) {
+            currentOrder.product = product;
+            currentOrder.quantity = 1;
             
-            document.getElementById('modalProductName').textContent = productName;
-            document.getElementById('modalProductPrice').textContent = price;
-            document.getElementById('formProduct').value = productName;
-            document.getElementById('formPrice').value = price;
-            document.getElementById('formCategory').value = category;
+            document.getElementById('modalProductName').textContent = product.name;
+            document.getElementById('modalProductPrice').textContent = '€' + product.price.toFixed(2).replace('.', ',');
+            document.getElementById('quantityDisplay').textContent = 1;
+            updateTotalPrice();
+            
+            document.getElementById('formProduct').value = product.name;
+            document.getElementById('formPricePerUnit').value = product.price;
+            document.getElementById('formQuantity').value = 1;
+            document.getElementById('formCategory').value = product.category;
             
             document.getElementById('orderModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
+        }
+
+        function changeQuantity(delta) {
+            const newQuantity = currentOrder.quantity + delta;
+            if (newQuantity >= 1 && newQuantity <= 99) {
+                currentOrder.quantity = newQuantity;
+                document.getElementById('quantityDisplay').textContent = newQuantity;
+                document.getElementById('formQuantity').value = newQuantity;
+                updateTotalPrice();
+            }
+        }
+
+        function updateTotalPrice() {
+            const total = currentOrder.product.price * currentOrder.quantity;
+            document.getElementById('totalPrice').textContent = '€' + total.toFixed(2).replace('.', ',');
+            document.getElementById('formTotalPrice').value = total.toFixed(2);
         }
 
         function closeModal() {
@@ -766,13 +978,13 @@
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Bestelling versturen...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Bestelling versturen...';
             
             setTimeout(() => {
                 document.getElementById('orderForm').style.display = 'none';
                 document.getElementById('successMessage').style.display = 'block';
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Bestelling Plaatsen';
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Bestelling Plaatsen';
                 
                 setTimeout(() => {
                     closeModal();
@@ -785,7 +997,7 @@
             const buttons = document.querySelectorAll('.filter-btn');
             
             buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            event.target.closest('.filter-btn').classList.add('active');
             
             products.forEach(product => {
                 if (category === 'all' || product.dataset.category === category) {
@@ -798,25 +1010,25 @@
 
         function searchProducts() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const products = document.querySelectorAll('.product-card');
+            const productCards = document.querySelectorAll('.product-card');
             
-            products.forEach(product => {
-                const name = product.querySelector('.product-name').textContent.toLowerCase();
-                const description = product.querySelector('.product-description').textContent.toLowerCase();
+            productCards.forEach(card => {
+                const name = card.querySelector('.product-name').textContent.toLowerCase();
+                const description = card.querySelector('.product-description').textContent.toLowerCase();
                 
                 if (name.includes(searchTerm) || description.includes(searchTerm)) {
-                    product.style.display = 'block';
+                    card.style.display = 'block';
                 } else {
-                    product.style.display = 'none';
+                    card.style.display = 'none';
                 }
             });
         }
 
         function sortProducts(sortType) {
             const grid = document.getElementById('productsGrid');
-            const products = Array.from(document.querySelectorAll('.product-card'));
+            const productCards = Array.from(document.querySelectorAll('.product-card'));
             
-            products.sort((a, b) => {
+            productCards.sort((a, b) => {
                 switch(sortType) {
                     case 'price-low':
                         return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
@@ -831,8 +1043,11 @@
                 }
             });
             
-            products.forEach(product => grid.appendChild(product));
+            productCards.forEach(card => grid.appendChild(card));
         }
+
+        // Initialiseer de pagina
+        renderProducts();
     </script>
 </body>
 </html>
